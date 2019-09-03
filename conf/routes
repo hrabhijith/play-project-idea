@@ -8,5 +8,7 @@ GET     /                           controllers.HomeController.index
 
 GET     /transportation             controllers.HomeController.transportation
 
+POST    /transportation             controllers.HomeController.searchTransportation
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
