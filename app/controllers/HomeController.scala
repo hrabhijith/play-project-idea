@@ -35,4 +35,6 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
     }
     Ok(views.html.index(outString))
   }
+  
+  def transportation()= Action{implicit request: Request[AnyContent] => Ok(views.html.transportation()) }
 }
