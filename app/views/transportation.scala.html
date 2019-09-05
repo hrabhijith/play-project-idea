@@ -1,7 +1,3 @@
-@import helper._
-
-@(userForm: Form[BasicForm])(implicit messagesProvider: MessagesProvider)
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -78,30 +74,32 @@
   <div class="container col-xl-30px" style="background-color: #f0f7f7; width:5000px;">
     <div class="d-flex flex-nowrap p-2  justify-content-center" style="background:#cdced4; font-family:Comic Sans MS;">
       Comapre Prices of Cabs and Public Transportation</div>
-    @form(action = routes.HomeController.searchTransportation()) {
-    <div class="d-flex flex-row align-items-stretch justify-content-center"
-      style="height:100px; background-color:#fafbfc;">
+    <form method="POST">
+      <div class="d-flex flex-row align-items-stretch justify-content-center"
+        style="height:100px; background-color:#fafbfc;">
 
-      <div class="p-100 col-xl-6" style="background-color: #fcfcfc; font-family:Courier New;">
-        <h6>Current Location</h6>
-        <input class="form-control mr-sm-2" type="search" placeholder="From" aria-label="Search"
-          style="background:#cdced4;">
-        @inputText(userForm("fromLocation"))
+        <div class="p-100 col-xl-6" style="background-color: #fcfcfc; font-family:Courier New;">
+          <h6>Current Location</h6>
+          <input class="form-control mr-sm-2" type="search" name="fromLocation" placeholder="From" aria-label="Search"
+            style="background:#cdced4;">
 
+
+        </div>
+        <div class="p-100 col-xl-6" style="background-color: #cdced4; font-family:Courier New;">
+          <h6>Destination</h6>
+          <input class="form-control mr-sm-2" type="search" name="toDestination" placeholder="To" aria-label="Search">
+
+        </div>
       </div>
-      <div class="p-100 col-xl-6" style="background-color: #cdced4; font-family:Courier New;">
-        <h6>Destination</h6>
-        <input class="form-control mr-sm-2" type="search" placeholder="To" aria-label="Search">
-        @inputText(userForm("toDestination"))
-      </div>
-    </div>
-    <br>
-    <br>
-    <div class="d-flex flex-nowrap justify-content-center">
-      <input class="btn btn-outline-success" type="submit" value="Search and Compare">
-    </div>
 
-    }
+      <br>
+      <br>
+      <div class="d-flex flex-nowrap justify-content-center">
+        <input class="btn btn-outline-success" type="submit" value="Search and Compare">
+      </div>
+    </form>
+
+
   </div>
   </div>
 

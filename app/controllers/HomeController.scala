@@ -53,11 +53,14 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
     Ok(views.html.index(outString))
   }
   
-  def transportation()= Action{implicit request: Request[AnyContent] => Ok(views.html.transportation(BasicForm.form)) }
+  
+  def transportation()= Action{implicit request: Request[AnyContent] => Ok(views.html.transportation()) }
 
   def searchTransportation() = Action { implicit request =>
   val formData1: String = BasicForm.form.bindFromRequest.get.fromLocation
   val formData2: String = BasicForm.form.bindFromRequest.get.toDestination
+
+
   // Google api here
   // Careful: BasicForm.form.bindFromRequest returns an Option
   Ok(formData1.toString+" "+formData2.toString) // just returning the data because it's an example :)
