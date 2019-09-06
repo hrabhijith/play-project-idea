@@ -8,6 +8,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import play.api.i18n.I18nSupport
+import scalaj.http.{Http, HttpResponse}
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -57,13 +58,25 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
   def transportation()= Action{implicit request: Request[AnyContent] => Ok(views.html.transportation()) }
 
   def searchTransportation() = Action { implicit request =>
-  val formData1: String = BasicForm.form.bindFromRequest.get.fromLocation
-  val formData2: String = BasicForm.form.bindFromRequest.get.toDestination
+  val formData: String = BasicForm.form.bindFromRequest.get.fromLocation
+  val toData: String = BasicForm.form.bindFromRequest.get.toDestination
+
+  // from location get call
+  val url : String = "https://maps.googleapis.com/maps/api/geocode/json?address=bengaluru&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
+
+  val fromAddressResult = Http(url).asString
+
+  // extract lat for from location
+  // extract lang for from location
+
+  // to loation url
+  // to location get call
+  // extract lat for from location
+  // extract lang for from location
 
 
-  // Google api here
-  // Careful: BasicForm.form.bindFromRequest returns an Option
-  Ok(formData1.toString+" "+formData2.toString) // just returning the data because it's an example :)
+  // display all variables down here
+  Ok(result.body.toString()) 
  }
 
 }
