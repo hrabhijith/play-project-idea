@@ -9,6 +9,7 @@ import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import play.api.i18n.I18nSupport
 import scalaj.http.{Http, HttpResponse}
+import play.api.libs.json._
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -62,21 +63,30 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
   val toData: String = BasicForm.form.bindFromRequest.get.toDestination
 
   // from location get call
-  val url : String = "https://maps.googleapis.com/maps/api/geocode/json?address=bengaluru&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
+  val fromUrl : String = "https://maps.googleapis.com/maps/api/geocode/json?address=bengaluru&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
 
-  val fromAddressResult = Http(url).asString
-
+  val fromAddressResult = Http(fromUrl).asString 
+  val fromJson = Json.parse(fromAddressResult.body)
   // extract lat for from location
+  val fromLat=  fromJson("results")(0)("geometry")("location")("lat")
+  
   // extract lang for from location
-
+  val fromLng=  fromJson("results")(0)("geometry")("location")("lng")
+  
   // to loation url
+  val toUrl : String = "https://maps.googleapis.com/maps/api/geocode/json?address=karlsruhe&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
+
   // to location get call
-  // extract lat for from location
+  val toAddressResult =Http(toUrl).asString
+   val toJson = Json.parse(toAddressResult.body)
+  
+   // extract lat for from location
+   val toLat=  toJson("results")(0)("geometry")("location")("lat")
   // extract lang for from location
+   val toLng=  toJson("results")(0)("geometry")("location")("lng")
 
-
-  // display all variables down here
-  Ok(result.body.toString()) 
+  // display all variables down here */
+  Ok(fromLat.toString()+ fromLng.toString() + toLat.toString() + toLng.toString()) 
  }
 
 }
