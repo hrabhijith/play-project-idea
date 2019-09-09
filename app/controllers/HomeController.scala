@@ -63,7 +63,7 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
   val toData: String = BasicForm.form.bindFromRequest.get.toDestination
 
   // from location get call
-  val fromUrl : String = "https://maps.googleapis.com/maps/api/geocode/json?address=bengaluru&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
+  val fromUrl : String = "https://maps.googleapis.com/maps/api/geocode/json?address="+formData+"&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
 
   val fromAddressResult = Http(fromUrl).asString 
   val fromJson = Json.parse(fromAddressResult.body)
@@ -74,7 +74,7 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
   val fromLng=  fromJson("results")(0)("geometry")("location")("lng")
   
   // to loation url
-  val toUrl : String = "https://maps.googleapis.com/maps/api/geocode/json?address=karlsruhe&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
+  val toUrl : String = "https://maps.googleapis.com/maps/api/geocode/json?address="+toData+"&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
 
   // to location get call
   val toAddressResult =Http(toUrl).asString
@@ -85,8 +85,13 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
   // extract lang for from location
    val toLng=  toJson("results")(0)("geometry")("location")("lng")
 
+   val uberAuthCodeUrl: String = "https://login.uber.com/oauth/v2/authorize?client_id=Pw6yMekRxG4g-HauzwGv6kWMxMU71BZB&response_type=code&redirect_uri=localhost:9000/transportation"
+
+   val uberAuthCodeRequest = Http(uberAuthCodeUrl).asString
+
+   val uberRedirectLocation = uberAuthCodeRequest.header("Location")
   // display all variables down here */
-  Ok(fromLat.toString()+ fromLng.toString() + toLat.toString() + toLng.toString()) 
+  Ok(uberRedirectLocation.toString()) 
  }
 
 }
