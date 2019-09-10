@@ -59,11 +59,11 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
   def transportation()= Action{implicit request: Request[AnyContent] => Ok(views.html.transportation()) }
 
   def searchTransportation() = Action { implicit request =>
-  val formData: String = BasicForm.form.bindFromRequest.get.fromLocation
+  val fromData: String = BasicForm.form.bindFromRequest.get.fromLocation
   val toData: String = BasicForm.form.bindFromRequest.get.toDestination
 
   // from location get call
-  val fromUrl : String = "https://maps.googleapis.com/maps/api/geocode/json?address="+formData+"&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
+  val fromUrl : String = s"https://maps.googleapis.com/maps/api/geocode/json?address=$fromData&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
 
   val fromAddressResult = Http(fromUrl).asString 
   val fromJson = Json.parse(fromAddressResult.body)
@@ -74,7 +74,7 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
   val fromLng=  fromJson("results")(0)("geometry")("location")("lng")
   
   // to loation url
-  val toUrl : String = "https://maps.googleapis.com/maps/api/geocode/json?address="+toData+"&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
+  val toUrl : String = s"https://maps.googleapis.com/maps/api/geocode/json?address=$toData&key=AIzaSyDQzBHFrZTSHduwMpg5wqL_o0YSZ3hvkdg"
 
   // to location get call
   val toAddressResult =Http(toUrl).asString
@@ -89,9 +89,18 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
 
    val uberAuthCodeRequest = Http(uberAuthCodeUrl).asString
 
-   val uberRedirectLocation = uberAuthCodeRequest.header("Location")
+   val uberRedirectLocation = uberAuthCodeRequest.header("Location").toString()
+
+   val a: Array[String] = uberRedirectLocation.split("%")
+   val len = a.length
+   val b: String = a(len-2)
+   val f: Array[String] = b.split("=")
+   val ff = f(1)
+
+   val tokenRequest = Http("https://login.uber.com/oauth/v2/token")
+   .postForm(Seq("client_secret":"IQe9jNvibMsLTV0prmlmdyxCzq0_YSnXPXc077ro", "client_id":"Pw6yMekRxG4g-HauzwGv6kWMxMU71BZB", "grant_type" :"authorization_code", "redirect_uri" : "localhost:9000\/transportation", "scope" : "profile", "code" : s"$ff" )).asString
   // display all variables down here */
-  Ok(uberRedirectLocation.toString()) 
+  Ok(tokenRequest.toString())
  }
 
 }
