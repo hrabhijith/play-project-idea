@@ -97,9 +97,20 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
    val f: Array[String] = b.split("=")
    val ff = f(1)
 
-   val tokenRequest = Http("https://login.uber.com/oauth/v2/token")
-   .postForm(Seq("client_secret":"IQe9jNvibMsLTV0prmlmdyxCzq0_YSnXPXc077ro", "client_id":"Pw6yMekRxG4g-HauzwGv6kWMxMU71BZB", "grant_type" :"authorization_code", "redirect_uri" : "localhost:9000\/transportation", "scope" : "profile", "code" : s"$ff" )).asString
+   //val tokenRequest = Http("https://login.uber.com/oauth/v2/token")
+   //.postForm(Seq("client_secret":"IQe9jNvibMsLTV0prmlmdyxCzq0_YSnXPXc077ro", "client_id":"Pw6yMekRxG4g-HauzwGv6kWMxMU71BZB", "grant_type" :"authorization_code", "redirect_uri" : "localhost:9000/transportation", "scope" : "profile", "code" : s"$ff" )).asString
   // display all variables down here */
+   
+   JSONObject postRequestbody = new JSONObject()
+            .put("client_secret","IQe9jNvibMsLTV0prmlmdyxCzq0_YSnXPXc077ro")
+                .put("client_id","Pw6yMekRxG4g-HauzwGv6kWMxMU71BZB")
+                .put("grant_type","authorization_code")
+                .put("redirect_uri", "localhost:9000/transportation")
+                .put("scope", "profile")
+                .put("code" , s"$ff");
+          val tokenRequest = Http("https://login.uber.com/oauth/v2/token").postData(postRequestbody).header("content-type", "application/json").asString.code
+
+       
   Ok(tokenRequest.toString())
  }
 
