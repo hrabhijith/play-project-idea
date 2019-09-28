@@ -114,4 +114,4 @@ class HomeController @Inject()(db:Database, cc: ControllerComponents) extends Ab
   Ok(tokenRequest.toString())
  }
 
-}
+}  
